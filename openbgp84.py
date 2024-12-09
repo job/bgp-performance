@@ -7,7 +7,7 @@ class OpenBGP84(Container):
     GUEST_DIR = '/root/config'
 
     def __init__(self, host_dir, conf, image='bgperf/openbgp'):
-        super(OpenBGP, self).__init__(self.CONTAINER_NAME, image, host_dir, self.GUEST_DIR, conf)
+        super(OpenBGP84, self).__init__(self.CONTAINER_NAME, image, host_dir, self.GUEST_DIR, conf)
 
     @classmethod
     def build_image(cls, force=False, tag='bgperf/openbgp', checkout='', nocache=False):
@@ -24,14 +24,14 @@ RUN groupadd _bgpd && \
    chgrp 0 /var/empty && \
    chmod 0755 /var/empty
 RUN mkdir /etc/bgpd
-RUN wget https://cdn.openbsd.org/pub/OpenBSD/OpenBGPD/openbgpd-{0}.tar.gz
+RUN wget -q https://cdn.openbsd.org/pub/OpenBSD/OpenBGPD/openbgpd-{0}.tar.gz
 RUN tar vfxz openbgpd-{0}.tar.gz
 RUN cd /root/openbgpd-{0} && \
     YACC=byacc ./configure --sysconfdir=/etc/bgpd && \
     make && \
     make install
 '''.format('8.4')
-        super(OpenBGP, cls).build_image(force, tag, nocache)
+        super(OpenBGP84, cls).build_image(force, tag, nocache)
 
 
 class OpenBGPTarget84(OpenBGP84, Target):
@@ -40,7 +40,7 @@ class OpenBGPTarget84(OpenBGP84, Target):
     CONFIG_FILE_NAME = 'bgpd.conf'
 
     def __init__(self, host_dir, conf, image='bgperf/openbgp'):
-        super(OpenBGPTarget, self).__init__(host_dir, conf, image=image)
+        super(OpenBGPTarget84, self).__init__(host_dir, conf, image=image)
 
     def write_config(self):
 
