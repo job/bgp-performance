@@ -34,7 +34,7 @@ RUN cd /root/openbgpd-{0} && \
         super(OpenBGP, cls).build_image(force, tag, nocache)
 
 
-class OpenBGPTarget77(OpenBGP, Target):
+class OpenBGPTarget77(OpenBGP77, Target):
     
     CONTAINER_NAME = 'bgperf_openbgp_target'
     CONFIG_FILE_NAME = 'bgpd.conf'
