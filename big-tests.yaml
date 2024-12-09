@@ -1,55 +1,40 @@
 tests:
   -
-    name: 1000p
-    # with 384 GB RAM, can't do more than 1000n at 1000p
-    neighbors: [1, 500, 750, 1000]
-    prefixes: [1000]
-    targets:
-      -
-        name: frr
-      -
-        name: bird
-        label: bird -s
-        single_table: True
-      -
-        name: frr
-      -
-        name: frr_c
-        label: frr 8
-      -
-        name: rustybgp
-  - # for more than 1024 neighbors must increase gcthresh3
-    # echo 16384 | sudo tee /proc/sys/net/ipv4/neigh/default/gc_thresh3
-    name: many_neighbors_100p
-    neighbors: [1500, 1750, 2000, 2250, 2500, 3000]
-    prefixes: [100]
+    name: all
+    neighbors: [2000, 1500, 100, 500]
+    prefixes: [1000, 500, 100]
     targets:
       -
         name: bird
-        label: bird -s
-        single_table: True
       -
-        name: frr
+        name: openbpg86
       -
-        name: frr_c
-        label: frr 8
+        name: openbpg85
       -
-        name: rustybgp
-  -
-  - # for more than 1024 neighbors must increase gcthresh3
-    # echo 16384 | sudo tee /proc/sys/net/ipv4/neigh/default/gc_thresh3
-    name: many_many_neighbors_10p
-    neighbors: [3000, 4000, 5000]
-    prefixes: [10]
-    targets:
+        name: openbgp84
       -
-        name: bird
-        label: bird -s
-        single_table: True
+        name: openbgp83
       -
-        name: frr
+        name: openbpg82
       -
-        name: frr_c
-        label: frr 8
+        name: openbpg81
       -
-        name: rustybgp
+        name: openbpg80
+      -
+        name: openbpg79
+      -
+        name: openbpg78
+      -
+        name: openbpg77
+      -
+        name: openbpg76
+      -
+        name: openbpg75
+      -
+        name: openbpg74
+      -
+        name: openbpg73
+      -
+        name: openbpg72
+      -
+        name: openbpg71
