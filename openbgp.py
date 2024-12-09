@@ -2,7 +2,7 @@
 from base import *
 import json
 
-class OpenBGP(Container):
+class OpenBGPYYY(Container):
     CONTAINER_NAME = None
     GUEST_DIR = '/root/config'
 
@@ -30,11 +30,11 @@ RUN cd /root/openbgpd-{0} && \
     YACC=byacc ./configure --sysconfdir=/etc/bgpd && \
     make && \
     make install
-'''.format('8.6')
+'''.format('XXX')
         super(OpenBGP, cls).build_image(force, tag, nocache)
 
 
-class OpenBGPTarget(OpenBGP, Target):
+class OpenBGPTargetYYY(OpenBGP, Target):
     
     CONTAINER_NAME = 'bgperf_openbgp_target'
     CONFIG_FILE_NAME = 'bgpd.conf'
