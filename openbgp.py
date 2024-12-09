@@ -13,9 +13,24 @@ class OpenBGP(Container):
     def build_image(cls, force=False, tag='bgperf/openbgp', checkout='', nocache=False):
 
         cls.dockerfile = '''
-FROM pierky/openbgpd:7.1p0
-
-'''.format(checkout)
+FROM ubuntu:latest
+EXPOSE 179
+WORKDIR /root
+RUN apt update && apt install -y autoconf build-essential wget flex git libreadline-dev libncurses5-dev libtool m4 unzip byacc libevent-dev
+RUN groupadd _bgpd && \
+   useradd -g _bgpd -s /sbin/nologin -d /var/empty -c 'OpenBGPD daemon' _bgpd && \
+   mkdir -p /var/empty && \
+   chown 0 /var/empty && \
+   chgrp 0 /var/empty && \
+   chmod 0755 /var/empty
+RUN mkdir /etc/bgpd
+RUN wget https://cdn.openbsd.org/pub/OpenBSD/OpenBGPD/openbgpd-{0}.tar.gz
+RUN tar vfxz openbgpd-{0}.tar.gz
+RUN cd /root/openbgpd-{0} && \
+    YACC=byacc ./configure --sysconfdir=/etc/bgpd && \
+    make && \
+    make install
+'''.format('8.6')
         super(OpenBGP, cls).build_image(force, tag, nocache)
 
 
@@ -33,6 +48,7 @@ class OpenBGPTarget(OpenBGP, Target):
 
 AS $ASN
 router-id {1}
+listen on {1}
 fib-update no
 """.format(self.conf['as'], self.conf['router-id'])
 
@@ -40,6 +56,7 @@ fib-update no
             return ('''neighbor {0} {{
     remote-as {1}
     enforce neighbor-as no
+    set nexthop self
 }}
 '''.format(n['router-id'], n['as']) )
     
@@ -104,7 +121,7 @@ fib-update no
         return '\n'.join(
             ['#!/bin/bash',
              'ulimit -n 65536',
-             '/usr/local/sbin/bgpd -f {guest_dir}/{config_file_name} -d > {guest_dir}/openbgp.log 2>&1']
+             '/usr/local/sbin/bgpd -v -f {guest_dir}/{config_file_name} -d > {guest_dir}/openbgp.log 2>&1']
         ).format(
             guest_dir=self.guest_dir,
             config_file_name=self.CONFIG_FILE_NAME,

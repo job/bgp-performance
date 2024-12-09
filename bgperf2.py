@@ -43,7 +43,6 @@ from frr_compiled import FRRoutingCompiled, FRRoutingCompiledTarget
 from rustybgp import RustyBGP, RustyBGPTarget
 from openbgp import OpenBGP, OpenBGPTarget
 from flock import Flock, FlockTarget
-from srlinux import SRLinux, SRLinuxTarget
 from junos import Junos, JunosTarget
 from eos import Eos, EosTarget
 from tester import ExaBGPTester, BIRDTester
@@ -96,7 +95,7 @@ def doctor(args):
     else:
         print('... not found. run `bgperf prepare`')
 
-    for name in ['gobgp', 'bird', 'frr', 'frr_c', 'rustybgp', 'openbgp', 'flock', 'srlinux']:
+    for name in ['gobgp', 'bird', 'frr', 'frr_c', 'rustybgp', 'openbgp', 'flock']:
         print('{0} image'.format(name), end=' ')
         if img_exists('bgperf/{0}'.format(name)):
             print('... ok')
@@ -146,7 +145,7 @@ def update(args):
 
 def remove_target_containers():
     for target_class in [BIRDTarget, GoBGPTarget, FRRoutingTarget, FRRoutingCompiledTarget, 
-        RustyBGPTarget, OpenBGPTarget, FlockTarget, JunosTarget, SRLinuxTarget, EosTarget]:
+        RustyBGPTarget, OpenBGPTarget, FlockTarget, JunosTarget, EosTarget]:
         if ctn_exists(target_class.CONTAINER_NAME):
             print('removing target container', target_class.CONTAINER_NAME)
             dckr.remove_container(target_class.CONTAINER_NAME, force=True)
@@ -441,8 +440,6 @@ def bench(args):
             target_class = OpenBGPTarget
         elif args.target == 'flock':
             target_class = FlockTarget
-        elif args.target == 'srlinux':
-            target_class = SRLinuxTarget
         elif args.target == 'junos':
             target_class = JunosTarget
         elif args.target == 'eos':
@@ -471,10 +468,8 @@ def bench(args):
     m.stats(q)
     controller_idle_percent(q)
     controller_memory_free(q)
-    if not is_remote:
-        target.stats(q)
-        target.neighbor_stats(q)
-
+    target.stats(q)
+    target.neighbor_stats(q)
 
     # want to launch all the neighbors at the same(ish) time
     # launch them after the test starts because as soon as they start they can send info at least for mrt
@@ -1086,7 +1081,7 @@ def create_args_parser(main=True):
 
     parser_bench = s.add_parser('bench', help='run benchmarks')
     parser_bench.add_argument('-t', '--target', choices=['gobgp', 'bird', 'frr', 'frr_c', 'rustybgp', 
-                              'openbgp', 'flock', 'srlinux', 'junos', 'eos'], default='bird')
+                              'openbgp', 'flock', 'junos', 'eos'], default='bird')
     parser_bench.add_argument('-i', '--image', help='specify custom docker image')
     parser_bench.add_argument('--mrt-file', type=str, 
                               help='mrt file, requires absolute path')

@@ -92,7 +92,7 @@ protocol static {{ ipv4;
                p['router-id'], local_address, p['as'], self.guest_dir)
                 f.write(config)
                 for path in p['paths']:
-                    f.write('      route {0} via {1};\n'.format(path, local_address))
+                    f.write('      route {0} blackhole;\n'.format(path))
                 f.write('}')
 
     def get_startup_cmd(self):

@@ -184,21 +184,12 @@ class Container(object):
             for stat in dckr.stats(self.ctn_id, decode=True):
                 if self.stop_monitoring:
                     return
-                cpu_percentage = 0.0
-                prev_cpu = stat['precpu_stats']['cpu_usage']['total_usage']
-                if 'system_cpu_usage' in stat['precpu_stats']:
-                    prev_system = stat['precpu_stats']['system_cpu_usage']
-                else:
-                    prev_system = 0
-                cpu = stat['cpu_stats']['cpu_usage']['total_usage']
-                system = stat['cpu_stats']['system_cpu_usage'] if 'system_cpu_usage' in stat['cpu_stats'] else 0
-                if not 'percpu_usage' in stat['cpu_stats']['cpu_usage']:
+                cpu_percentage = 0
+                if not 'system_cpu_usage' in stat['precpu_stats']:
                     continue
-                cpu_num = len(stat['cpu_stats']['cpu_usage']['percpu_usage'])
-                cpu_delta = float(cpu) - float(prev_cpu)
-                system_delta = float(system) - float(prev_system)
-                if system_delta > 0.0 and cpu_delta > 0.0:
-                    cpu_percentage = (cpu_delta / system_delta) * float(cpu_num) * 100.0
+                cpu_delta = stat['cpu_stats']['cpu_usage']['total_usage'] - stat['precpu_stats']['cpu_usage']['total_usage']
+                system_cpu_delta = stat['cpu_stats']['system_cpu_usage'] - stat['precpu_stats']['system_cpu_usage']
+                cpu_percentage = (cpu_delta / system_cpu_delta) * stat['cpu_stats']['online_cpus'] * 100.0
                 mem_usage = stat['memory_stats'].get('usage', 0)
                 queue.put({'who': self.name, 'cpu': cpu_percentage, 'mem': mem_usage, 'time': datetime.datetime.now()})
 

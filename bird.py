@@ -183,7 +183,7 @@ return true;
     neighbor range 10.0.0.0/8 external;
     #hold time 10;
     connect delay time 1;
-    ipv4 {{import {}; export all; }};
+    ipv4 {{import {}; export all; next hop self; import table on;}};
     #rs client;
 }}
 '''.format(self.conf['as'], filter)

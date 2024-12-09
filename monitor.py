@@ -47,8 +47,9 @@ class Monitor(GoBGP):
             f.write(yaml.dump(config))
         self.config_name = 'gobgpd.conf'
         startup = '''#!/bin/bash
+set -v
 ulimit -n 65536
-gobgpd -t yaml -f {1}/{2} -l {3} > {1}/gobgpd.log 2>&1
+gobgpd -t yaml -f {1}/{2} -l {3} | tee {1}/gobgpd.log 2>&1
 '''.format(conf['monitor']['local-address'], self.guest_dir, self.config_name, 'info')
         filename = '{0}/start.sh'.format(self.host_dir)
         with open(filename, 'w') as f:
