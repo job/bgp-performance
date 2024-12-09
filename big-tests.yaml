@@ -7,35 +7,52 @@ tests:
     targets:
       -
         name: bird
+        tester_type: bird
       -
         name: openbpg86
+        tester_type: bird
       -
         name: openbpg85
+        tester_type: bird
       -
         name: openbgp84
+        tester_type: bird
       -
         name: openbgp83
+        tester_type: bird
       -
         name: openbpg82
+        tester_type: bird
       -
         name: openbpg81
+        tester_type: bird
       -
         name: openbpg80
+        tester_type: bird
       -
         name: openbpg79
+        tester_type: bird
       -
         name: openbpg78
+        tester_type: bird
       -
         name: openbpg77
+        tester_type: bird
       -
         name: openbpg76
+        tester_type: bird
       -
         name: openbpg75
+        tester_type: bird
       -
         name: openbpg74
+        tester_type: bird
       -
         name: openbpg73
+        tester_type: bird
       -
         name: openbpg72
+        tester_type: bird
       -
         name: openbpg71
+        tester_type: bird
