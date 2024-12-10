@@ -11,48 +11,64 @@ tests:
       -
         name: openbgp86
         tester_type: bird
+        label: '86'
       -
         name: openbgp85
         tester_type: bird
+        label: '85'
       -
         name: openbgp84
         tester_type: bird
+        label: '84'
       -
         name: openbgp83
         tester_type: bird
+        label: '83'
       -
         name: openbgp82
         tester_type: bird
+        label: '82'
       -
         name: openbgp81
         tester_type: bird
+        label: '81'
       -
         name: openbgp80
         tester_type: bird
+        label: '80'
       -
         name: openbgp79
         tester_type: bird
+        label: '79'
       -
         name: openbgp78
         tester_type: bird
+        label: '78'
       -
         name: openbgp77
         tester_type: bird
+        label: '77'
       -
         name: openbgp76
         tester_type: bird
+        label: '76'
       -
         name: openbgp75
         tester_type: bird
+        label: '75'
       -
         name: openbgp74
         tester_type: bird
+        label: '74'
       -
         name: openbgp73
         tester_type: bird
+        label: '73'
       -
         name: openbgp72
         tester_type: bird
+        label: '72'
       -
         name: openbgp71
         tester_type: bird
+        label: '71'
