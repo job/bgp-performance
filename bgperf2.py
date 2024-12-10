@@ -505,9 +505,6 @@ def bench(args):
 
     output_stats['monitor_wait_time'] = m.wait_established(conf['target']['local-address'])
     output_stats['cores'], output_stats['memory'] = get_hardware_info()
-    if target_class == EosTarget:
-        print("Waiting extra 10 seconds for EOS ")
-        time.sleep(10)
 
     start = datetime.datetime.now()
 
