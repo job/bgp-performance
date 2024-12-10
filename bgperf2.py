@@ -54,9 +54,6 @@ from openbgp83 import OpenBGP83, OpenBGPTarget83
 from openbgp84 import OpenBGP84, OpenBGPTarget84
 from openbgp85 import OpenBGP85, OpenBGPTarget85
 from openbgp86 import OpenBGP86, OpenBGPTarget86
-from flock import Flock, FlockTarget
-from junos import Junos, JunosTarget
-from eos import Eos, EosTarget
 from tester import ExaBGPTester, BIRDTester
 from mrt_tester import GoBGPMRTTester, ExaBGPMrtTester
 from bgpdump2 import Bgpdump2, Bgpdump2Tester
@@ -107,7 +104,7 @@ def doctor(args):
     else:
         print('... not found. run `bgperf prepare`')
 
-    for name in ['gobgp', 'bird', 'frr', 'frr_c', 'rustybgp', 'openbgp74', 'openbgp75', 'openbgp76', 'openbgp77', 'openbgp78', 'openbgp79', 'openbgp80', 'openbgp81', 'openbgp82', 'openbgp83', 'openbgp84', 'openbgp85', 'openbgp86', 'flock']:
+    for name in ['gobgp', 'bird', 'frr', 'frr_c', 'rustybgp', 'openbgp74', 'openbgp75', 'openbgp76', 'openbgp77', 'openbgp78', 'openbgp79', 'openbgp80', 'openbgp81', 'openbgp82', 'openbgp83', 'openbgp84', 'openbgp85', 'openbgp86']:
         print('{0} image'.format(name), end=' ')
         if img_exists('bgperf/{0}'.format(name)):
             print('... ok')
@@ -127,9 +124,6 @@ def prepare(args):
     OpenBGP.build_image(args.force, nocache=args.no_cache)
     FRRoutingCompiled.build_image(args.force, nocache=args.no_cache)
     Bgpdump2.build_image(args.force, nocache=args.no_cache)
-    #don't do anything for srlinux, junos, eos because it's just a download out of band
-
-
 
 def update(args):
     if args.image == 'all' or args.image == 'exabgp':
@@ -170,8 +164,6 @@ def update(args):
         OpenBGP85.build_image(True, checkout=args.checkout, nocache=args.no_cache)
     if args.image == 'all' or args.image == 'openbgp86':
         OpenBGP86.build_image(True, checkout=args.checkout, nocache=args.no_cache)
-    if args.image == 'all' or args.image == 'flock':
-        Flock.build_image(True, checkout=args.checkout, nocache=args.no_cache)
     if args.image == 'all' or args.image == 'frr_c':
         FRRoutingCompiled.build_image(True, checkout=args.checkout, nocache=args.no_cache)
     if args.image == 'eos':
@@ -180,7 +172,7 @@ def update(args):
         Bgpdump2.build_image(True, checkout=args.checkout, nocache=args.no_cache)
 
 def remove_target_containers():
-    for target_class in [BIRDTarget, GoBGPTarget, FRRoutingTarget, FRRoutingCompiledTarget, RustyBGPTarget, OpenBGPTarget74, OpenBGPTarget75, OpenBGPTarget76, OpenBGPTarget77, OpenBGPTarget78, OpenBGPTarget79, OpenBGPTarget80, OpenBGPTarget81, OpenBGPTarget82, OpenBGPTarget83, OpenBGPTarget84, OpenBGPTarget85, OpenBGPTarget86, FlockTarget, JunosTarget, EosTarget]:
+    for target_class in [BIRDTarget, GoBGPTarget, FRRoutingTarget, FRRoutingCompiledTarget, RustyBGPTarget, OpenBGPTarget74, OpenBGPTarget75, OpenBGPTarget76, OpenBGPTarget77, OpenBGPTarget78, OpenBGPTarget79, OpenBGPTarget80, OpenBGPTarget81, OpenBGPTarget82, OpenBGPTarget83, OpenBGPTarget84, OpenBGPTarget85, OpenBGPTarget86
         if ctn_exists(target_class.CONTAINER_NAME):
             print('removing target container', target_class.CONTAINER_NAME)
             dckr.remove_container(target_class.CONTAINER_NAME, force=True)
@@ -497,12 +489,6 @@ def bench(args):
             target_class = OpenBGPTarget85
         elif args.target == 'openbgp86':
             target_class = OpenBGPTarget86
-        elif args.target == 'flock':
-            target_class = FlockTarget
-        elif args.target == 'junos':
-            target_class = JunosTarget
-        elif args.target == 'eos':
-            target_class = EosTarget
         else:
             print(f"incorrect target {args.target}")
         print('run', args.target)
@@ -1106,7 +1092,7 @@ def create_args_parser(main=True):
     parser_prepare.set_defaults(func=prepare)
 
     parser_update = s.add_parser('update', help='rebuild bgp docker images')
-    parser_update.add_argument('image', choices=['exabgp', 'exabgp_mrtparse', 'gobgp', 'bird', 'frr', 'frr_c', 'rustybgp', 'openbgp74', 'openbgp75', 'openbgp76', 'openbgp77', 'openbgp78', 'openbgp79', 'openbgp80', 'openbgp81', 'openbgp82', 'openbgp83', 'openbgp84', 'openbgp85', 'openbgp86', 'flock',  'bgpdump2', 'all'])
+    parser_update.add_argument('image', choices=['exabgp', 'exabgp_mrtparse', 'gobgp', 'bird', 'frr', 'frr_c', 'rustybgp', 'openbgp74', 'openbgp75', 'openbgp76', 'openbgp77', 'openbgp78', 'openbgp79', 'openbgp80', 'openbgp81', 'openbgp82', 'openbgp83', 'openbgp84', 'openbgp85', 'openbgp86', 'bgpdump2', 'all'])
     parser_update.add_argument('-c', '--checkout', default='HEAD')
     parser_update.add_argument('-n', '--no-cache', action='store_true')
     parser_update.set_defaults(func=update)
@@ -1138,7 +1124,7 @@ def create_args_parser(main=True):
         parser.add_argument('--filter_test', choices=['transit', 'ixp'], default=None)
 
     parser_bench = s.add_parser('bench', help='run benchmarks')
-    parser_bench.add_argument('-t', '--target', choices=['gobgp', 'bird', 'frr', 'frr_c', 'rustybgp', 'openbgp74', 'openbgp75', 'openbgp76', 'openbgp77', 'openbgp78', 'openbgp79', 'openbgp80', 'openbgp81', 'openbgp82', 'openbgp83', 'openbgp84', 'openbgp85', 'openbgp86', 'flock', 'junos', 'eos'], default='bird')
+    parser_bench.add_argument('-t', '--target', choices=['gobgp', 'bird', 'frr', 'frr_c', 'rustybgp', 'openbgp74', 'openbgp75', 'openbgp76', 'openbgp77', 'openbgp78', 'openbgp79', 'openbgp80', 'openbgp81', 'openbgp82', 'openbgp83', 'openbgp84', 'openbgp85', 'openbgp86'], default='bird')
     parser_bench.add_argument('-i', '--image', help='specify custom docker image')
     parser_bench.add_argument('--mrt-file', type=str, 
                               help='mrt file, requires absolute path')

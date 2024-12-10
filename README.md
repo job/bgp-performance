@@ -159,23 +159,6 @@ container that is hardcoded to 7.5.1. However, I've also created another target 
 that checks FRRouting out of git with the 8.0 tag and builds the container. This container is not automatically
 built when you do bgperf2 bench.
 
-### Testing commercial BGP Stacks
-
-bgperf2 was originally created to test open source bgp software, so for most containers it compiles the software
-and creates a container. For commerical NOSes this doesn't make sense. For those you will need to download
-the container images manually and then use bgperf2.
-
-For most of these images, bgperf2 mounts a local directory (usually in /tmp/bgperf2) to the container. These
-commerical stacks then write back data as root, and set the privleges so that a regular user cannot delete these
-files and directories.
-
-bgperf2 tries to delete /tmp/bgperf2 before it runs, but it can't with data from these stacks, so you
-might need to remove them yourself. The other option is to run bgperf2 as root \<shrugs\>, that's not a good idea.
-
-```
-sudo rm -rf /tmp/bpgperf2
-```
-
 ## batch
 A  feature called batch lets you run multiple tests, collect all the data, and produces graphs. 
 If you run a test that runs out of physical RAM on your machine, linux OOM killer will just kill the process and you'll lose the data from that experiment.

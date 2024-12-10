@@ -299,12 +299,6 @@ class Target(Container):
 
         return ctn
     
-    def get_template(self, data, template_file="junos.j2",):
-        env = Environment(loader=FileSystemLoader(searchpath="./nos_templates"))
-        template = env.get_template(template_file)
-        output = template.render(data=data)
-        return output
-
 class Tester(Container):
 
     CONTAINER_NAME_PREFIX = None
