@@ -40,7 +40,7 @@ class OpenBGPTarget72(OpenBGP72, Target):
     CONFIG_FILE_NAME = 'bgpd.conf'
 
     def __init__(self, host_dir, conf, image='bgperf/openbgp72'):
-        super(OpenBGPTarget71, self).__init__(host_dir, conf, image=image)
+        super(OpenBGPTarget72, self).__init__(host_dir, conf, image=image)
 
     def write_config(self):
 
