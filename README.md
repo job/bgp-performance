@@ -10,25 +10,18 @@ bgperf2 is a performance measurement tool for BGP implementation. This was forke
 * [MRT injection](https://github.com/netenglabs/bgperf2/blob/master/docs/mrt.md)
 
 ## Updates from original bgperf
-I've changed bgperf to work with python 3 and work with new versions of all the NOSes. It actually works, the original version that this is a fork of does not work anymore because of newer version of python and each of the routing stacks.
 
- This version no longer compiles EXABGP or FRR, it gets PIP or containers already created. Quagga has been removed since it doesn't seem to be updated anymore.
+Job Snijders changed bgperf to emit cpu&mem stats following recent Docker API changes, and added insight into
+performance of specific OpenBGPD releases.
 
-To get bgperf2 to work with all the changes in each stack  I've had to change configuration. I 
-don't know if all the features of bgperr still work: I've gotten the simplest version of
-each config to work.
-
-Caveats: 
-
-I don't know if adding more policy will still work for all targets.
-I haven't tested remote targets.
+Justin Pietsch changed bgperf to work with python 3 and work with new versions of all the NOSes. 
 
 ## What it does
-bgperf2 creates containers of bgp software to be performance tested. It then can run either one off tests "bench" or
+bgperf creates containers of bgp software to be performance tested. It then can run either one off tests "bench" or
 a group of tests "batch". It will create graphs to help you understand what the bgp software is doing as well as to
 compare across batches. 
 
-bgperf2 has two main ways of producing prefixes for BGP performance testing. The first way uses either BIRD or EXABGP
+bgperf has two main ways of producing prefixes for BGP performance testing. The first way uses either BIRD or EXABGP
 to create prefixes and send them. These are pretty lightweight, so it's easy to generate hundreds (or even thousands)
 of neighbors with a small amount (hundreds or thousands) or prefixes. BIRD is generally faster, so it is the default
 but EXABGP is around for some extra testing.
@@ -183,84 +176,6 @@ might need to remove them yourself. The other option is to run bgperf2 as root \
 sudo rm -rf /tmp/bpgperf2
 ```
 
-I have setup multi-threaded support by default in both of these. If you want to do uni-threaded performance
-testing you will have to edit config files, which is documented below.
-
-**Warning** The license for these stacks prohibits publishing results. Don't publish results.
-
-#### EOS
-
-[cEOS overview](https://www.arista.com/en/products/software-controlled-container-networking)
-
-To download, after getting an account: https://www.arista.com/en/support/software-download. Make sure you get the cEOS64
-image. I didn't the first time, and the results are frustringly slow. After downloading:
-
-``` bash
-$ docker import ../NOS/cEOS64-lab-4.27.0F.tar.xz ceos:latest
-```
-
-Be sure to use this command for importing: if you don't tag the image as ceos:latest then bgperf2
-won't be able to find the image.
-
-N.B. EOS takes longer to startup than other BGP software I've tested with bgperf2, so don't be alarmed.
-However, if it's taken more than 60 seconds to establish a neighbor, something is wrong and start 
-looking at logs.
-
-EOS has less clear directions on how to setup multithreading and the consequences. I can't find an authoritative doc to point to.
-
-However, if you want to remove multi-threading support, remove this line from nos_templates/eos.j2
-
-```bash
-service routing protocols model multi-agent
-```
-
-There is no way to adjust the number of threads being used. For cEOS it appears to be hardcoded
-no matter the hardware that you have.
-
-#### Juniper
-
-[Junos cRPD deployment guide](https://www.juniper.net/documentation/us/en/software/crpd/crpd-deployment/index.html)
-
-
-Download the image to your local machine and then run:
-
-``` bash
-$ docker load -i ../NOS/junos-routing-crpd-docker-21.3R1-S1.1.tgz
-$ docker tag crpd:21.3R1-S1.1 crpd:latest
-```
-
-Be sure you tag the image or bgperf2 cannot find the image and everything will fail.
-
-bgperf2 mounts the log directory as /tmp/bgperf2/junos/logs, however there are a lot there and most of it
-is not relevant. To see if your config worked correctly on startup:
-
-``` bash
-$ docker logs bgperf_junos_target
- ```
-
-[Deploying BGP RIB Sharding and Update Threading](https://www.juniper.net/documentation/en_US/day-one-books/DO_BGPSharding.pdf) -- while informative it's weird to me that it's 2021 and getting mult-threaded performance requires a 40 page document. How am I not supposed to think that networking is two decades behind everybody else in software? (This isn't just a Juniper problem by any means)
-
-For multithreading, as mentioned above bgperf2 sets this up by default in nos_tempaltes/junos.j2
-
-``` bash
-processes {
-        routing {
-            bgp {
-                rib-sharding {
-                    number-of-shards {{ data.cores }};
-                }
-                update-threading {
-                    number-of-threads {{ data.cores }};
-                }
-            }
-        }       
-    }
-```
-
-data.cores is set in junos.py and by default it's half the number of availble cores on the test machine, 
-with a max of 31, since that is the Junos max. If you want to try setting the threads to something different
-you can hard code those values. If you want to see without multi-threading, delete that whole section.
-
 ## batch
 A  feature called batch lets you run multiple tests, collect all the data, and produces graphs. 
 If you run a test that runs out of physical RAM on your machine, linux OOM killer will just kill the process and you'll lose the data from that experiment.
@@ -280,17 +195,8 @@ tests:
     targets: 
       -
         name: bird
-        label: bird -s
-        single_table: True
       - 
-        name: frr
-      -
-        name: gobgp
-      -
-        name: frr_c
-        label: frr 8
-      -
-        name: rustybgp
+        name: openbgpd84
 ```
 
 You will get output like this:
