@@ -6,11 +6,11 @@ class OpenBGP81(Container):
     CONTAINER_NAME = None
     GUEST_DIR = '/root/config'
 
-    def __init__(self, host_dir, conf, image='bgperf/openbgp'):
+    def __init__(self, host_dir, conf, image='bgperf/openbgp81'):
         super(OpenBGP81, self).__init__(self.CONTAINER_NAME, image, host_dir, self.GUEST_DIR, conf)
 
     @classmethod
-    def build_image(cls, force=False, tag='bgperf/openbgp', checkout='', nocache=False):
+    def build_image(cls, force=False, tag='bgperf/openbgp81', checkout='', nocache=False):
 
         cls.dockerfile = '''
 FROM ubuntu:latest
@@ -36,10 +36,10 @@ RUN cd /root/openbgpd-{0} && \
 
 class OpenBGPTarget81(OpenBGP81, Target):
     
-    CONTAINER_NAME = 'bgperf_openbgp_target'
+    CONTAINER_NAME = 'bgperf_openbgp81_target'
     CONFIG_FILE_NAME = 'bgpd.conf'
 
-    def __init__(self, host_dir, conf, image='bgperf/openbgp'):
+    def __init__(self, host_dir, conf, image='bgperf/openbgp81'):
         super(OpenBGPTarget81, self).__init__(host_dir, conf, image=image)
 
     def write_config(self):
