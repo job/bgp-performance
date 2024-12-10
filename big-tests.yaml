@@ -1,7 +1,7 @@
 tests:
   -
     name: all
-    neighbors: [2000, 1500, 100, 500]
+    neighbors: [2000, 1500, 1000, 500]
     prefixes: [1000, 500, 100]
     filter_test: [None]
     targets:
