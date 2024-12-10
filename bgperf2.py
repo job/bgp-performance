@@ -41,6 +41,9 @@ from bird import BIRD, BIRDTarget
 from frr import FRRouting, FRRoutingTarget
 from frr_compiled import FRRoutingCompiled, FRRoutingCompiledTarget
 from rustybgp import RustyBGP, RustyBGPTarget
+from openbgp71 import OpenBGP71, OpenBGPTarget71
+from openbgp72 import OpenBGP72, OpenBGPTarget72
+from openbgp73 import OpenBGP73, OpenBGPTarget73
 from openbgp74 import OpenBGP74, OpenBGPTarget74
 from openbgp75 import OpenBGP75, OpenBGPTarget75
 from openbgp76 import OpenBGP76, OpenBGPTarget76
