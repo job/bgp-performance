@@ -30,7 +30,7 @@ RUN cd /root/openbgpd-{0} && \
     YACC=byacc ./configure --sysconfdir=/etc/bgpd && \
     make && \
     make install
-'''.format('8.6')
+'''.format('8.7')
         super(OpenBGP87, cls).build_image(force, tag, nocache)
 
 
