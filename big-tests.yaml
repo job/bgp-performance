@@ -9,6 +9,10 @@ tests:
         name: bird
         tester_type: bird
       -
+        name: openbgp87
+        tester_type: bird
+        label: '87'
+      -
         name: openbgp86
         tester_type: bird
         label: '86'
