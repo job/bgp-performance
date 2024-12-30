@@ -30,11 +30,9 @@ class BIRD3(Container):
 FROM ubuntu:latest
 WORKDIR /root
 RUN apt-get update && apt-get install -qy git autoconf libtool gawk make \
-flex bison libncurses-dev libreadline6-dev iproute2 wget
-RUN apt-get install -qy flex
-RUN wget -q https://bird.network.cz/download/bird-{0}.tar.gz
-RUN tar vfxz bird-{0}.tar.gz
-RUN cd bird-{0} && ./configure && make && make install
+flex bison libncurses-dev libreadline6-dev iproute2 
+RUN git clone https://gitlab.nic.cz/labs/bird
+RUN cd bird && git checkout thread-next && ./configure && make && make install
 '''.format('3.0.0')
         super(BIRD3, cls).build_image(force, tag, nocache)
 
