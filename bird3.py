@@ -32,7 +32,7 @@ WORKDIR /root
 RUN apt-get update && apt-get install -qy git autoconf libtool gawk make \
 flex bison libncurses-dev libreadline6-dev iproute2 
 RUN git clone https://gitlab.nic.cz/labs/bird
-RUN cd bird && git checkout thread-next && ./configure && make && make install
+RUN cd bird && git checkout thread-next && autoreconf && ./configure && make && make install
 '''.format('3.0.0')
         super(BIRD3, cls).build_image(force, tag, nocache)
 
