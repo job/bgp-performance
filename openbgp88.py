@@ -24,7 +24,7 @@ RUN groupadd _bgpd && \
    chgrp 0 /var/empty && \
    chmod 0755 /var/empty
 RUN mkdir /etc/bgpd
-RUN wget -q https://chloe.sobornost.net/~job/openbgpd-{0}.tar.gz
+RUN wget -q https://cdn.openbsd.org/pub/OpenBSD/OpenBGPD/openbgpd-{0}.tar.gz
 RUN tar vfxz openbgpd-{0}.tar.gz
 RUN cd /root/openbgpd-{0} && \
     YACC=byacc ./configure --sysconfdir=/etc/bgpd && \
