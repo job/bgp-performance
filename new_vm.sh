@@ -1,10 +1,12 @@
 #!/bin/bash
 
-sudo apt update
-sudo apt upgrade --yes
-sudo apt install docker.io --yes
-sudo apt install python3-pip --yes
+set -ev
 
-pip3 install --break-system-packages -r pip-requirements.txt
+apt update
+apt upgrade --yes
+apt install docker.io --yes
+apt install python3-pip --yes
 
-sudo /sbin/shutdown now -r
+pip3 install --break-system-packages --root-user-action=ignore -r pip-requirements.txt
+
+/sbin/shutdown now -r
