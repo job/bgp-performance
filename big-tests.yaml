@@ -1,13 +1,24 @@
 tests:
   -
     name: all
-    neighbors: [2000, 1500, 1000, 500]
-    prefixes: [1000, 500, 100]
+    neighbors: [500, 100]
+    prefixes: [500, 100]
     filter_test: [None]
     targets:
       -
         name: bird
         tester_type: bird
+      -
+        name: bird3
+        tester_type: bird
+      -
+        name: openbgpdev
+        tester_type: bird
+        label: 'dev'
+      -
+        name: openbgp89
+        tester_type: bird
+        label: '89'
       -
         name: openbgp88
         tester_type: bird
@@ -16,7 +27,3 @@ tests:
         name: openbgp87
         tester_type: bird
         label: '87'
-      -
-        name: openbgp86
-        tester_type: bird
-        label: '86'
