@@ -12,9 +12,9 @@ tests:
         name: bird3
         tester_type: bird
       -
-        name: openbgpdev
+        name: openbgp90
         tester_type: bird
-        label: 'dev'
+        label: '90'
       -
         name: openbgp89
         tester_type: bird

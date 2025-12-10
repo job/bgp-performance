@@ -2,15 +2,15 @@
 from base import *
 import json
 
-class OpenBGPdev(Container):
+class OpenBGP90(Container):
     CONTAINER_NAME = None
     GUEST_DIR = '/root/config'
 
-    def __init__(self, host_dir, conf, image='bgperf/openbgpdev'):
-        super(OpenBGPdev, self).__init__(self.CONTAINER_NAME, image, host_dir, self.GUEST_DIR, conf)
+    def __init__(self, host_dir, conf, image='bgperf/openbgp90'):
+        super(OpenBGP90, self).__init__(self.CONTAINER_NAME, image, host_dir, self.GUEST_DIR, conf)
 
     @classmethod
-    def build_image(cls, force=False, tag='bgperf/openbgpdev', checkout='', nocache=False):
+    def build_image(cls, force=False, tag='bgperf/openbgp90', checkout='', nocache=False):
 
         cls.dockerfile = '''
 FROM ubuntu:latest
@@ -31,16 +31,16 @@ RUN cd openbgpd-portable  && git fetch && git checkout for_job && \
     make && \
     make install
 '''
-        super(OpenBGPdev, cls).build_image(force, tag, nocache)
+        super(OpenBGP90, cls).build_image(force, tag, nocache)
 
 
-class OpenBGPTargetdev(OpenBGPdev, Target):
+class OpenBGPTarget90(OpenBGP90, Target):
     
-    CONTAINER_NAME = 'bgperf_openbgpdev_target'
+    CONTAINER_NAME = 'bgperf_openbgp90_target'
     CONFIG_FILE_NAME = 'bgpd.conf'
 
-    def __init__(self, host_dir, conf, image='bgperf/openbgpdev'):
-        super(OpenBGPTargetdev, self).__init__(host_dir, conf, image=image)
+    def __init__(self, host_dir, conf, image='bgperf/openbgp90'):
+        super(OpenBGPTarget90, self).__init__(host_dir, conf, image=image)
 
     def write_config(self):
 
