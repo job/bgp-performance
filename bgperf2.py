@@ -196,7 +196,7 @@ def update(args):
         Bgpdump2.build_image(True, checkout=args.checkout, nocache=args.no_cache)
 
 def remove_target_containers():
-    for target_class in [BIRDTarget, GoBGPTarget, FRRoutingTarget, FRRoutingCompiledTarget, RustyBGPTarget, OpenBGPTarget73, OpenBGPTarget72, OpenBGPTarget71, OpenBGPTarget74, OpenBGPTarget75, OpenBGPTarget76, OpenBGPTarget77, OpenBGPTarget78, OpenBGPTarget79, OpenBGPTarget80, OpenBGPTarget81, OpenBGPTarget82, OpenBGPTarget83, OpenBGPTarget84, OpenBGPTarget85, OpenBGPTarget86, OpenBGPTarget87, OpenBGPTarget88, OpenBGPTarget89]:
+    for target_class in [BIRDTarget, BIRD3Target, GoBGPTarget, FRRoutingTarget, FRRoutingCompiledTarget, RustyBGPTarget, OpenBGPTarget73, OpenBGPTarget72, OpenBGPTarget71, OpenBGPTarget74, OpenBGPTarget75, OpenBGPTarget76, OpenBGPTarget77, OpenBGPTarget78, OpenBGPTarget79, OpenBGPTarget80, OpenBGPTarget81, OpenBGPTarget82, OpenBGPTarget83, OpenBGPTarget84, OpenBGPTarget85, OpenBGPTarget86, OpenBGPTarget87, OpenBGPTarget88, OpenBGPTarget89, OpenBGPTarget90]:
         if ctn_exists(target_class.CONTAINER_NAME):
             print('removing target container', target_class.CONTAINER_NAME)
             try:
